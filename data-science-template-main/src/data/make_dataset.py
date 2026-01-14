@@ -70,7 +70,7 @@ f=files[0]
 df=pd.read_csv(f)
 # Function to read data from multiple files
 def read_data_from_files(file_list):
-    
+    data_path="../../data/raw/MetaMotion\\"
     gyr_df=pd.DataFrame()
     acc_df=pd.DataFrame()
     acc_set=1
@@ -121,11 +121,12 @@ sampling_rules={
     "label":"last",
     "participant":"last",
     "category":"last",
+    "set":"last"
 }
 resampled_data=data_merged[:1000].resample(rule="200ms").apply(sampling_rules)
 #split by days
 days=[g for n, g in resampled_data.groupby(pd.Grouper(freq="D"))]
-resampled_data=pd.concat([df.resample(rule="200ms").apply(sampling_rules).dropna() for df in days])
+resampled_data=pd.concat([data_merged.resample(rule="200ms").apply(sampling_rules).dropna() for df in days])
 
-#export dataset
+#export dataset 
 resampled_data.to_pickle("../../data/interim/resampled_meta_motion_data.pkl")
